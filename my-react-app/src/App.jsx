@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react'
+import './styles/main.scss'
+import SearchResults from "./Component/SearchResults.jsx"
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [books, setBooks] = useState([])
+  const [query, setQuery] = useState('')
+
+  useEffect(() => {
+    // Søket kan bare komme opp om det er 3 elle fler tegn
+    if (query.length >= 3) {
+      const fetchData = async () => {
+        const response = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(query)}`)
+        const data = await response.json()
+        setBooks(data.docs)
+      }
+
+      fetchData().catch(console.error)
+    } else {
+      // Hvis søkestrengen er under tre tegn nullstilles boklisten 
+      setBooks([])
+    }
+  }, [query]) // Oppdatere seg etter endring i søkefeltet 
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="App">
+      <header>
+        <h1>Book Finder</h1>
+      </header>
+      <main>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Minimum three characters..."
+          className="search-input" // Bruker en klasse for stilsetting
+        />
+        <SearchResults books={books} />
+      </main>
+    </div>
   )
 }
 
