@@ -11,14 +11,14 @@ function App() {
     // Søket kan bare komme opp om det er 3 elle fler tegn
     if (query.length >= 3) {
       const fetchData = async () => {
-        const response = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(query)}`)
+        const response = await fetch(`https://openlibrary.org/search.json?q=james%20bond&fields=*,availability&limit=1${encodeURIComponent(query)}`)
         const data = await response.json()
         setBooks(data.docs)
       }
 
       fetchData().catch(console.error)
     } else {
-      // Hvis søkestrengen er under tre tegn nullstilles boklisten 
+      // Hvis søkestrengen er under tre tegn nullstilles listen seg
       setBooks([])
     }
   }, [query]) // Oppdatere seg etter endring i søkefeltet 

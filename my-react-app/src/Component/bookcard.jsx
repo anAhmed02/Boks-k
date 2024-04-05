@@ -1,6 +1,6 @@
 import React from 'react'
 
-// Dette komponent vise informasjon om en enkelt bok
+// Komponent for å vise informasjon om en enkelt bok
 function BookCard({ title, first_publish_year, author_name, cover_i, ratings_average, id_amazon }) { 
   const coverImageUrl = cover_i ? `https://covers.openlibrary.org/b/id/${cover_i}-M.jpg` : 'path/to/your/placeholder/image.jpg'
   const amazonSearchUrl = id_amazon && id_amazon.length > 0 ? `https://www.amazon.com/s?k=${id_amazon}` : '#'
